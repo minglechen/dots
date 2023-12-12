@@ -1,3 +1,7 @@
+# Fedora has a different path for zsh
+if [ -f /etc/fedora-release ]; then
+    export FPATH=/usr/share/zsh/5.9/functions:$FPATH
+fi
 
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
@@ -24,17 +28,6 @@ if [ -f ${HOME}/.zplug/init.zsh ]; then
 fi
 zplug load
 
-# Use lf to switch directories and bind it to ctrl-o
-lfcd () {
-    tmp="$(mktemp)"
-    lf -last-dir-path="$tmp" "$@"
-    if [ -f "$tmp" ]; then
-        dir="$(cat "$tmp")"
-        rm -f "$tmp"
-        [ -d "$dir" ] && [ "$dir" != "$(pwd)" ] && cd "$dir"
-    fi
-}
-bindkey -s '^o' 'lfcd\n'
 
 # Edit line in vim with ctrl-e:
 autoload edit-command-line; zle -N edit-command-line
@@ -57,9 +50,6 @@ n()
     fi
 }
 
-# thefuck aliases
-eval "$(thefuck --alias)"
-
 # alias
 alias proxy="http_proxy=http://localhost:7890 https_proxy=http://localhost:7890"
 alias pacinstall="pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S"
@@ -72,8 +62,10 @@ export PATH="$HOME/bin:$PATH"
 export PATH=$PATH:~/.local/bin
 
 # fzf key bindings
-source /usr/share/fzf/key-bindings.zsh
-source /usr/share/fzf/completion.zsh
+if [ -f /etc/arch-release ]; then
+  source /usr/share/fzf/key-bindings.zsh
+  source /usr/share/fzf/completion.zsh
+fi
 
 # nnn 
 export NNN_PLUG='p:preview-tui;o:fzopen;b:nbak;f:finder;v:imgview;k:kdeconnect;n:nuke;d:dragdrop;m:nmount'
@@ -86,3 +78,6 @@ export NNN_OPENER="$HOME/.config/nnn/plugins/nuke"
 
 # ssh-agent
 SSH_AUTH_SOCK=/run/user/1000/ssh-agent.socket; export SSH_AUTH_SOCK;
+
+# docker
+alias docker=podman
