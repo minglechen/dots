@@ -1,0 +1,30 @@
+#!/bin/bash
+
+function get_icon() {
+  PROFILE=$(powerprofilesctl get)
+  if [[ $PROFILE == 'balanced' ]]; then
+    echo ""
+  else
+    echo ""
+  fi
+}
+
+function toggle() {
+  PROFILE=$(powerprofilesctl get)
+  if [[ $PROFILE == 'balanced' ]]; then
+    eww update powerprofile='{"profile": "power-saver", "icon": ""}'
+    powerprofilesctl set power-saver
+  else
+    eww update powerprofile='{"profile": "balanced", "icon": ""}'
+    powerprofilesctl set balanced
+  fi
+}
+
+function get() {
+  PROFILE=$(powerprofilesctl get)
+  ICON=$(get_icon)
+  echo '{"profile": "'$PROFILE'", "icon": "'$ICON'"}'
+}
+
+if [[ $1 == 'toggle' ]]; then toggle; fi
+if [[ $1 == 'get' ]]; then get; fi

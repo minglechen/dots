@@ -1,0 +1,10 @@
+#!/bin/bash
+
+pkill eww
+pkill python
+
+$HOME/.local/bin/eww daemon
+# $HOME/bin/eww open desktop
+$HOME/.local/bin/eww open bar
+#$HOME/bin/eww open dock
+# $HOME/bin/eww open notifications
