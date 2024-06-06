@@ -1,0 +1,2 @@
+timeout 300 'if ! pgrep -x "swaylock" > /dev/null; then swaylock -f; fi'
+timeout 330 'hyprctl dispatch dpms off'

@@ -1,0 +1,49 @@
+#!/bin/bash
+
+function status() {
+  if [[ $(nmcli g | grep -oE "disconnected") ]]; then
+    echo "down"
+  else
+    echo "up"
+  fi
+}
+
+function name() {
+    name=$(iwgetid -r)
+    echo $name
+}
+
+function icon() {
+  if [[ $(status) == 'down' ]]; then 
+    echo '󰪎'
+  elif [[ $(cat /sys/class/net/eth0/operstate) == 'up' ]]; then
+    echo '󰛳'
+  else
+    name=$(name)
+    if [[ "$name" != "" ]]; then
+        QUALITY=`iwconfig wlan0 | grep Link | sed 's/[=\/]/ /g' | awk '{print $3}'`
+        MAX_QUALITY=`iwconfig wlan0 | grep Link | sed 's/[=\/]/ /g' | awk '{print $4}'`
+        qual=$(echo $((QUALITY*100/MAX_QUALITY)))
+
+        if [[ "$qual" -gt "80" ]]; then
+            echo '󰤨'
+        elif [[ "$qual" -gt "60" ]]; then
+            echo '󰤥'
+        elif [[ "$qual" -gt "40" ]]; then
+            echo '󰤢'
+        elif [[ "$qual" -gt "20" ]]; then
+            echo '󰤟'
+        else
+            echo '󰤯'
+        fi
+    else
+        echo '󰤮'
+    fi
+  fi
+}
+
+get(){
+  echo "{\"status\": \"$(status)\", \"name\":\"$(name)\", \"icon\":\"$(icon)\"}"
+}
+
+ if [[ $1 == 'get' ]]; then get; fi

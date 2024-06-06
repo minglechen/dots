@@ -1,0 +1,43 @@
+#! /bin/bash
+
+ICONS="󰁺 󰁻 󰁼 󰁽 󰁾 󰁿 󰂀 󰂁 󰂂 󰁹"
+CHARGING_ICONS="󰢜 󰂆 󰂇 󰂈 󰢝 󰂉 󰢞 󰂊 󰂋 󰂅"
+FULL_ICON="󰂄"
+LOW_ICON="󱃍"
+function percent {
+  echo $(cat /sys/class/power_supply/BAT1/capacity)
+}
+
+function status {
+  echo $(cat /sys/class/power_supply/BAT1/status)
+}
+
+function low_status {
+  if [[ $(percent) -lt 15 ]]; then
+    notify-send -u critical -t 10000 "Battery low" "Battery is at $(percent)%"
+    echo "low"
+    return
+  fi
+  echo "normal"
+}
+function icon {
+  if [[ $(percent) -gt 95 && $(status) == 'Not charging' ]]; then
+    echo $FULL_ICON
+    return
+  fi
+  if [[ $(status) == 'Charging' ]]; then
+    echo $(echo $CHARGING_ICONS | cut -d ' ' -f $(($(percent)/10)))
+    return
+  fi
+  if [[ $(percent) -lt 15 ]]; then
+    echo $LOW_ICON
+    return
+  fi
+  echo $(echo $ICONS | cut -d ' ' -f $(($(percent)/10)))
+}
+
+function get {
+  echo "{\"percent\":$(percent),\"state\":\"$(status)\",\"icon\":\"$(icon)\",\"low_status\":\"$(low_status)\"}"
+}
+
+if [[ $1 == 'get' ]]; then get; fi

@@ -1,0 +1,186 @@
+(defwidget bell []
+  (eventbox 
+    :class "bell button"
+    :onhover "eww update bell_rev=true"
+    :onhoverlost "eww update bell_rev=false"
+    :onclick "actions notifications"
+    :cursor "pointer"
+    (box
+      :class "bell"
+      :space-evenly false
+      (revealer 
+        :transition "slideleft"
+        :reveal {bell_rev || arraylength(notifications.popups) != 0} 
+        (label 
+          :class "bell count" 
+          :visible {notifications.count > 0}
+          :text {notifications.notifications[0].summary}
+          :limit-width 20
+        )
+      )
+      (overlay
+        (button 
+          :class "icon ${notifications.count > 0 ? "" : "nothing"}"
+          :onclick "actions notifications"
+          "󰂚"
+        )
+        (label
+          :class "bell indicator"
+          :visible {notifications.count > 0}
+          :valign "start" :halign "start"
+          :text "󱅫"
+        )
+      )
+    )
+  )
+)
+
+(defwidget app []
+  (box 
+    :class "app" 
+    :space-evenly false 
+    :spacing 5 
+    :visible {hyprland["class"].app_name != "null"}
+    (label 
+      :class "icon ${hyprland["class"].app_name}" 
+      :text {hyprland["class"].app_icon} 
+      :visible {hyprland["class"].app_icon != "null"}
+    )
+    (label :class "name" :text {hyprland["class"].app_name} :limit-width 20)
+  )
+)
+
+(defwidget bar_clock []
+  (eventbox 
+    :class "date button" 
+    :cursor "pointer" 
+    :onclick "actions calendar"
+    (box 
+      :class "date" 
+      :space-evenly false 
+      :spacing 10
+      (clock :name "bar_clock")
+      ;; (label :class "period" :text "")
+      (label 
+        :class "today" 
+        :text {formattime(EWW_TIME, "%a %b %d")}
+      )
+    )
+  )
+)
+
+(defwidget battery []
+  (eventbox 
+    :class "battery button"
+    :onclick "${EWW_CMD} update battery_rev=${battery_rev?false:true}"
+    (box 
+      :class "battery" 
+      :space-evenly false 
+      (box 
+        :class "icon ${battery.low_status}"
+        {battery.icon})
+      (revealer 
+        :transition "slideleft" 
+        :reveal battery_rev 
+        (label 
+          :class "percentage" 
+          :text {battery.percent} 
+          :visible {battery.percent != "null"}
+        )
+      )
+    )
+  )
+)
+
+
+(defwidget network []
+  (eventbox
+    :class "network"
+    :onclick "${EWW_CMD} update network_rev=${network_rev?false:true}"
+    (box
+      :space-evenly false
+      (box 
+        :class "icon ${network.status}"
+        {network.icon}
+      )
+      (revealer
+        :transition "slideleft"
+        :reveal network_rev
+        :duration "300ms"
+        (label
+          :class "name"
+          :text {network.name}
+        )
+      )
+    )
+  )
+)
+
+(defwidget bar_volume []
+  (eventbox
+    :class "bar_volume button"
+    :onclick "${EWW_CMD} update volume_label_rev=${volume_label_rev?false:true}"
+    :onhover "${EWW_CMD} update volume_rev=true" 
+    :onhoverlost "${EWW_CMD} update volume_rev=false"
+    (box
+      :class "bar_volume"
+      :space-evenly false
+      (eventbox
+        :cursor "pointer"
+        (button 
+          :class "icon ${volume.muted == "yes" ? "muted" : ""}"
+          :onclick "$HOME/.local/bin/volume toggle"
+          {volume.icon}
+        )
+      )
+      (revealer 
+        :transition "slideleft" 
+        :reveal volume_rev 
+        (eventbox
+          :cursor "pointer"
+          :valign "center"
+          (scale
+            :class "scale"
+            :tooltip {volume.muted == "yes" ? "Muted" : "${volume.volume}%"}
+            :value {volume.muted == "yes" ? "0" : volume.volume} 
+            :min 0 
+            :max 101 
+            :onchange "$HOME/.local/bin/volume set {}"
+          )
+        )
+      )
+      (revealer
+        :transition "slideleft"
+        :reveal volume_label_rev
+        :duration "300ms"
+        (label
+          :class "value"
+          :text {volume.muted == "yes" ? "" : "${volume.volume}%"}
+        )
+      )
+    )
+  )
+)
+
+(defwidget workspaces []
+  (eventbox 
+    :class "workspaces"
+    (box 
+      :class "box"
+      (for workspace in {hyprland.workspaces}
+        (eventbox
+          :cursor "pointer"
+          :onscroll "echo {} | sed -e 's/up/-1/g' -e 's/down/+1/g' | xargs hyprctl dispatch workspace"
+          :halign "center" 
+          :valign "center" 
+          :vexpand true
+          (button 
+            :onclick "hyprctl dispatch workspace ${workspace.id}"
+            :class "workspace ${workspace.id == hyprland.active ? "active" : workspace.windows > 0 ? "occupied" : "empty"}"
+
+          )
+        )
+      )
+    )
+  )
+)

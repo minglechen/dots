@@ -1,0 +1,3 @@
+[submodule "home/.config/nnn"]
+	path = home/.config/nnn
+	url = https://github.com/jarun/nnn.git

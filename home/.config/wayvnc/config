@@ -1,0 +1,6 @@
+use_relative_paths=true
+address=0.0.0.0
+enable_auth=true
+username=mingle
+password=cml20020217
+rsa_private_key_file=rsa_key.pem
