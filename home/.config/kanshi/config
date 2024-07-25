@@ -18,6 +18,10 @@ profile lab2 {
   output 'Dell Inc. DELL U2422HE 2K4TNM3' mode 1920x1080@60 position 0,0
 }
 
+profile lab3 {
+  output eDP-1 position 0,1803
+  output 'Apple Computer Inc StudioDisplay 0xBBFAA05A' mode 5120x2880@60 position 0,0 scale 1.6
+}
 profile default {
 	output eDP-1 position 0,0
 }

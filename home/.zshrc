@@ -44,6 +44,7 @@ alias pacremove="pacman -Qq | fzf --multi --preview 'pacman -Qi {1}' | xargs -ro
 alias yayremove="pacman -Qmq | fzf --multi --preview 'pacman -Qi {1}' | xargs -ro sudo pacman -Rns"
 alias dragon="dragon-drop"
 alias rm="rm -I"
+alias docker=podman
 
 # path
 export PATH="$HOME/.local/bin:$PATH"
@@ -79,13 +80,24 @@ n ()
 
     # The command builtin allows one to alias nnn to n, if desired, without
     # making an infinitely recursive alias
-    command nnn -a -P p "$@"
+    command nnn -a -P p -T t "$@"
 
     [ ! -f "$NNN_TMPFILE" ] || {
         . "$NNN_TMPFILE"
         rm -f "$NNN_TMPFILE" > /dev/null
     }
 }
+
+# yazi cd on quit
+function yy() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
+
 export NNN_BMS='d:~/Downloads;p:~/Phone Download'
 export NNN_PLUG='p:preview-tui;o:fzopen;b:nbak;f:finder;v:imgview;k:kdeconnect;n:nuke;d:dragdrop;m:nmount'
 # export NNN_FIFO=/tmp/nnn.fifo
@@ -98,6 +110,3 @@ export NNN_ICONLOOKUP=1
 
 # ssh-agent
 SSH_AUTH_SOCK=/run/user/1000/ssh-agent.socket; export SSH_AUTH_SOCK;
-
-# docker
-alias docker=podman
