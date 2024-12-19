@@ -36,6 +36,9 @@ zplug load
 autoload edit-command-line; zle -N edit-command-line
 bindkey '^e' edit-command-line
 
+# Accept zsh suggestion
+bindkey '^Y' autosuggest-accept
+
 
 # alias
 alias proxy="http_proxy=socks5://localhost:12345 https_proxy=socks5://localhost:12345"
@@ -64,6 +67,11 @@ function yy() {
 		builtin cd -- "$cwd"
 	fi
 	rm -f -- "$tmp"
+}
+
+# mosh morello via srcf
+mosh-morello () {
+    mosh -p 5123 --ssh="ssh -p 2222" mc2262@pip.srcf.net -- tmux a
 }
 
 # editor
