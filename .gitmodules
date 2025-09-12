@@ -1,3 +1,3 @@
-[submodule "home/.config/nnn"]
-	path = home/.config/nnn
-	url = https://github.com/jarun/nnn.git
+[submodule "home/.config/nvim"]
+	path = home/.config/nvim
+	url = git@github.com:minglechen/kickstart.nvim.git
