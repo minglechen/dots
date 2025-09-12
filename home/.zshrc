@@ -47,11 +47,10 @@ alias pacremove="pacman -Qq | fzf --multi --preview 'pacman -Qi {1}' | xargs -ro
 alias yayremove="pacman -Qmq | fzf --multi --preview 'pacman -Qi {1}' | xargs -ro sudo pacman -Rns"
 alias dragon="dragon-drop"
 alias rm="rm -I"
-alias docker=podman
 alias n=yy
 
 # path
-export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$HOME/.local/sbin:$PATH"
 
 # fzf key bindings
 if [ -f /etc/arch-release ]; then
@@ -60,12 +59,11 @@ if [ -f /etc/arch-release ]; then
 fi
 
 # yazi cd on quit
-function yy() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
 	yazi "$@" --cwd-file="$tmp"
-	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-		builtin cd -- "$cwd"
-	fi
+	IFS= read -r -d '' cwd < "$tmp"
+	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
 	rm -f -- "$tmp"
 }
 

@@ -1,5 +1,6 @@
 {
 	"layer": "top",
+	// "position": "bottom",
 	// Using margin-bottom with a negative value in order to reduce the space between Hyprland window and waybar
 	"margin-bottom": 4,
 	"margin-top": 4,
