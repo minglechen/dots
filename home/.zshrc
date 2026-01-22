@@ -47,7 +47,7 @@ alias pacremove="pacman -Qq | fzf --multi --preview 'pacman -Qi {1}' | xargs -ro
 alias yayremove="pacman -Qmq | fzf --multi --preview 'pacman -Qi {1}' | xargs -ro sudo pacman -Rns"
 alias dragon="dragon-drop"
 alias rm="rm -I"
-alias n=yy
+alias n=y
 
 # path
 export PATH="$HOME/.local/bin:$HOME/.local/sbin:$PATH"

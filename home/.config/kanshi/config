@@ -15,5 +15,5 @@ profile lab2 {
 }
 
 profile default {
-  output eDP-1 position 0,0
+  output eDP-1 position 0,0 scale 1.333333
 }
