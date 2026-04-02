@@ -1,8 +1,3 @@
-# Fedora has a different path for zsh
-if [ -f /etc/fedora-release ]; then
-    export FPATH=/usr/share/zsh/5.9/functions:$FPATH
-fi
-
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
 HISTSIZE=1000
@@ -48,15 +43,30 @@ alias yayremove="pacman -Qmq | fzf --multi --preview 'pacman -Qi {1}' | xargs -r
 alias dragon="dragon-drop"
 alias rm="rm -I"
 alias n=y
+alias gs="git status"
+alias gd="git diff"
+alias gl="git log --oneline --graph --decorate"
+alias ga="git add"
+alias gc="git commit"
+alias gp="git push"
+alias gco="git checkout"
+alias gcb="git checkout -b"
+alias gcm="git commit -m"
+alias gca="git commit -a"
+alias gpl="git pull"
+alias gcl="git clone"
+alias gss="git stash"
+alias gsp="git stash pop"
+alias gsa="git stash apply"
+alias gsd="git stash drop"
+
+alias globalprotect="sudo -b gpclient -qq connect vpn.upenn.edu"
 
 # path
 export PATH="$HOME/.local/bin:$HOME/.local/sbin:$PATH"
 
 # fzf key bindings
-if [ -f /etc/arch-release ]; then
-  source /usr/share/fzf/key-bindings.zsh
-  source /usr/share/fzf/completion.zsh
-fi
+source <(fzf --zsh)
 
 # yazi cd on quit
 function y() {
@@ -65,11 +75,6 @@ function y() {
 	IFS= read -r -d '' cwd < "$tmp"
 	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
 	rm -f -- "$tmp"
-}
-
-# mosh morello via srcf
-mosh-morello () {
-    mosh -p 5123 --ssh="ssh -p 2222" mc2262@pip.srcf.net -- tmux a
 }
 
 # editor
