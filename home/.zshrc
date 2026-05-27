@@ -81,6 +81,3 @@ function y() {
 export EDITOR=nvim
 
 [ -f "/home/mingle/.ghcup/env" ] && source "/home/mingle/.ghcup/env" # ghcup-env
-
-# ssh-agent
-SSH_AUTH_SOCK=/run/user/1000/ssh-agent.socket; export SSH_AUTH_SOCK;
