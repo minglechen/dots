@@ -1,0 +1,9 @@
+[[mgr.prepend_keymap]]
+on   = [ "<C-s>" ]
+run  = "plugin kdeconnect-send"
+desc = "Send selected files via KDE Connect"
+
+[[mgr.prepend_keymap]]
+on   = [ "g", "i" ]
+run  = "plugin lazygit"
+desc = "run lazygit"

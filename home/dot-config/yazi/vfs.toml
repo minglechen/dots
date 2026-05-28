@@ -1,0 +1,5 @@
+[services.mingle-vm]
+type = "sftp"
+host = "mingle-vm.cil.penn"
+user = "mingle02"
+port = 22
