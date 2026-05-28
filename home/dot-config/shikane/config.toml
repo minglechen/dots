@@ -1,0 +1,46 @@
+[[profile]]
+name = "laptop builtin"
+exec = ["notify-send shikane \"Profile $SHIKANE_PROFILE_NAME has been applied\"", "$HOME/.local/bin/inhibit off"]
+[[profile.output]]
+    enable = true
+    search = "n=eDP-1"
+    mode = "2256x1504@59.999Hz"
+    position = "0,0"
+    scale = 1.33203125
+    transform = "normal"
+    adaptive_sync = false
+
+[[profile]]
+name = "cil"
+exec = ["notify-send shikane \"Profile $SHIKANE_PROFILE_NAME has been applied\"", "$HOME/.local/bin/inhibit on"]
+[[profile.output]]
+    enable = true
+    search = ["m=Odyssey G95NC", "s=HNTY303943", "v=Samsung Electric Company"]
+    mode = "7680x2160@119.997Hz"
+    position = "0,0"
+    scale = 1.0
+    transform = "normal"
+    adaptive_sync = false
+[[profile.output]]
+    enable = false
+    search = "n=eDP-1"
+
+[[profile]]
+name = "domus"
+[[profile.output]]
+    enable = true
+    search = ["m=DELL G2724D", "s=7JL16Y3", "v=Dell Inc."]
+    mode = "2560x1440@59.951Hz"
+    position = "1692,0"
+    scale = 1.0
+    transform = "normal"
+    adaptive_sync = false
+
+[[profile.output]]
+    enable = true
+    search = "n=eDP-1"
+    mode = "2256x1504@59.999Hz"
+    position = "0,0"
+    scale = 1.33203125
+    transform = "normal"
+    adaptive_sync = false
