@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -eu
+
+cache_file="/tmp/pager.cache"
+[[ ! -p "$cache_file" ]] && touch "$cache_file" && trap "rm $cache_file" 0
+cat - > "$cache_file"
+if [ -z "$1" ]; then
+  nvim -R -c "terminal cat $cache_file" -c "only"
+else
+  nvim -R -c "terminal cat $cache_file" -c "only" -c "$1"
+fi

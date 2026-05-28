@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+VOLUME=$(pactl get-sink-volume @DEFAULT_SINK@ | grep Volume | awk '{print $5}' | tr -d "% ")
+
+function icon {
+    if [[   $VOLUME -ge 66 ]]; then echo '󰕾'
+    elif [[ $VOLUME -ge 33 ]]; then echo '󰖀'
+    elif [[ $VOLUME -ge 1  ]]; then echo '󰕿'
+    else echo '󰝟'
+    fi
+}
+
+function level {
+    echo $(pactl get-sink-volume @DEFAULT_SINK@ | grep Volume | awk '{print $5}' | tr -d "% ")
+}
+
+
+function lower {
+    pactl set-sink-volume @DEFAULT_SINK@ -5%
+    if [[ $(level) == "0" && $(mute_state) == "off" ]]; then
+      mute_toggle
+    fi
+
+}
+
+function raise {
+    pactl set-sink-volume @DEFAULT_SINK@ +5%
+    if [[ $(mute_state) == "on" ]]; then
+      mute_toggle
+    fi
+}
+
+
+function type_icon {
+    SINK=$(pactl get-default-sink)
+    if [[ $SINK == *'bluez_output'* ]]; then echo "󰋋"
+    else echo "󰓃"
+    fi
+}
+
+function mute_state {
+    STATE=$(pactl get-sink-mute @DEFAULT_SINK@ | awk '{print $2}')
+    if [[ $STATE == 'no' ]]; then echo 'off'
+    else echo 'on'; fi
+}
+
+function mute_toggle {
+    pactl set-sink-mute @DEFAULT_SINK@ toggle
+}
+
+function set {
+    pactl set-sink-volume @DEFAULT_SINK@ $1"%"
+}
+
+function get {
+    echo "{
+        \"level\": \"$(level)\",
+        \"icon\": \"$(icon)\",
+        \"type_icon\": \"$(type_icon)\",
+        \"mute\": {
+            \"state\": \"$(mute_state)\"
+        }
+    }"
+}
+
+if [[ $1 == 'mute_toggle' ]]; then mute_toggle; fi
+if [[ $1 == 'down' ]]; then lower; fi
+if [[ $1 == 'up' ]]; then raise; fi
+if [[ $1 == 'set' ]]; then set $2; fi
+if [[ $1 == 'get' ]]; then get; fi

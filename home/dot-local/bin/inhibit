@@ -1,0 +1,37 @@
+#!/bin/bash
+
+LOCK_PIDFILE="/tmp/inhibit.pid"
+
+case "$1" in
+    on)
+        if [[ -f $LOCK_PIDFILE ]] && kill -0 $(cat $LOCK_PIDFILE) 2>/dev/null; then
+            echo "Inhibit lock is already active (PID $(cat $LOCK_PIDFILE))."
+        else
+            echo "Acquiring inhibit lock..."
+            systemd-inhibit --what=sleep:idle --why="User requested inhibit" sleep infinity &
+            echo $! > $LOCK_PIDFILE
+            echo "Inhibit lock acquired (PID $!)."
+        fi
+        ;;
+    off)
+        if [[ -f $LOCK_PIDFILE ]] && kill -0 $(cat $LOCK_PIDFILE) 2>/dev/null; then
+            echo "Releasing inhibit lock..."
+            kill $(cat $LOCK_PIDFILE)
+            rm -f $LOCK_PIDFILE
+            echo "Inhibit lock released."
+        else
+            echo "No inhibit lock is currently active."
+        fi
+        ;;
+    status)
+        if [[ -f $LOCK_PIDFILE ]] && kill -0 $(cat $LOCK_PIDFILE) 2>/dev/null; then
+            echo "Inhibit lock is active (PID $(cat $LOCK_PIDFILE))."
+        else
+            echo "No inhibit lock active."
+        fi
+        ;;
+    *)
+        echo "Usage: $0 {on|off|status}"
+        exit 1
+        ;;
+esac

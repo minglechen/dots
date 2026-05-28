@@ -1,0 +1,7 @@
+#!/bin/bash
+
+NUM_MONS=$(hyprctl -j monitors | jq length)
+
+if [ "$NUM_MONS" -gt 1 ]; then
+	hyprctl dispatch dpms off eDP-1
+fi

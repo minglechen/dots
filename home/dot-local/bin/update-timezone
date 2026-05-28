@@ -1,0 +1,10 @@
+#!/bin/sh
+
+TZ=$(timedatectl list-timezones | grep -x $(curl -s ipinfo.io/timezone))
+
+if [ -n "$TZ" ]; then
+	echo "Setting timezone to $TZ"
+	sudo timedatectl set-timezone $TZ
+else
+	echo "Check network connection"
+fi
