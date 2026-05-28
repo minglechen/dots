@@ -1,16 +1,11 @@
-# Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
 bindkey -v
-# End of lines configured by zsh-newuser-install
 
-# The following lines were added by compinstall
-zstyle :compinstall filename '/home/mingle/.zshrc'
-
+# zsh completion
 autoload -Uz compinit
 compinit
-# End of lines added by compinstall
 autoload -Uz bashcompinit
 bashcompinit
 
@@ -20,12 +15,49 @@ eval "$(starship init zsh)"
 # zoxide init
 eval "$(zoxide init --cmd cd zsh)"
 
-# Zplug init
-if [ -f ${HOME}/.zplug/init.zsh ]; then
-    source ${HOME}/.zplug/init.zsh
-fi
-zplug load
+# zsh_unplugged - https://github.com/mattmc3/zsh_unplugged
+#
+# A simple, fast, minimalist Zsh plugin management function in ~30 lines of code.
+##? Clone a plugin using its github repo and (optionally) commit sha,
+##? identify its init file, source it, and add it to your fpath.
+function plugin-load {
+  local plugin repo commitsha plugdir initfile initfiles=() clone_args=()
+  : ${ZPLUGINDIR:=${ZDOTDIR:-~/.config/zsh}/plugins}
+  for plugin in $@; do
+    repo="$plugin"
+    clone_args=(--quiet --depth 1 --recursive --shallow-submodules)
+    commitsha=""
+    # Pin repo to a specific commit sha if provided
+    if [[ "$plugin" == *'@'* ]]; then
+      repo="${plugin%@*}"
+      commitsha="${plugin#*@}"
+      clone_args+=(--no-checkout)
+    fi
+    plugdir=$ZPLUGINDIR/${repo:t}
+    initfile=$plugdir/${repo:t}.plugin.zsh
+    if [[ ! -d $plugdir ]]; then
+      echo "Cloning $repo..."
+      git clone "${clone_args[@]}" https://github.com/$repo $plugdir
+      if [[ -n "$commitsha" ]]; then
+        git -C $plugdir fetch -q origin "$commitsha"
+        git -C $plugdir checkout -q "$commitsha"
+      fi
+    fi
+    if [[ ! -e $initfile ]]; then
+      initfiles=($plugdir/*.{plugin.zsh,zsh-theme,zsh,sh}(N))
+      (( $#initfiles )) || { echo >&2 "No init file found '$repo'." && continue }
+      ln -sf $initfiles[1] $initfile
+    fi
+    fpath+=$plugdir
+    (( $+functions[zsh-defer] )) && zsh-defer . $initfile || . $initfile
+  done
+}
 
+repos=(
+  'zsh-users/zsh-syntax-highlighting'
+  'zsh-users/zsh-autosuggestions'
+)
+plugin-load $repos
 
 # Edit line in vim with ctrl-e:
 autoload edit-command-line; zle -N edit-command-line
@@ -34,6 +66,26 @@ bindkey '^e' edit-command-line
 # Accept zsh suggestion
 bindkey '^Y' autosuggest-accept
 
+# path
+export PATH="$HOME/.local/bin:$HOME/.local/sbin:$PATH"
+
+# fzf key bindings
+source <(fzf --zsh)
+
+# yazi cd on quit
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+	rm -f -- "$tmp"
+}
+
+# editor
+export EDITOR=nvim
+
+# ghcup
+[ -f "/home/mingle/.ghcup/env" ] && source "/home/mingle/.ghcup/env"
 
 # alias
 alias proxy="http_proxy=socks5://localhost:12345 https_proxy=socks5://localhost:12345"
@@ -59,25 +111,4 @@ alias gss="git stash"
 alias gsp="git stash pop"
 alias gsa="git stash apply"
 alias gsd="git stash drop"
-
 alias globalprotect="sudo -b gpclient -qq connect vpn.upenn.edu"
-
-# path
-export PATH="$HOME/.local/bin:$HOME/.local/sbin:$PATH"
-
-# fzf key bindings
-source <(fzf --zsh)
-
-# yazi cd on quit
-function y() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-	yazi "$@" --cwd-file="$tmp"
-	IFS= read -r -d '' cwd < "$tmp"
-	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
-	rm -f -- "$tmp"
-}
-
-# editor
-export EDITOR=nvim
-
-[ -f "/home/mingle/.ghcup/env" ] && source "/home/mingle/.ghcup/env" # ghcup-env
