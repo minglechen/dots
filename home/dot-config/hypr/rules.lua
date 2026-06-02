@@ -168,7 +168,14 @@ hl.window_rule({
     },
     float = true,
     center = true,
-    size = "(monitor_w*0.5) (monitor_h*0.5)",
+})
+
+hl.window_rule({
+    match = {
+        class = "^(org.keepassxc.KeePassXC)$",
+    },
+    float = true,
+    center = true,
 })
 
 local office_apps = "^(Microsoft (Word|Excel|PowerPoint|Publisher|Powershell|Visual Studio|Explorer))|Command Prompt$"

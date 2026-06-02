@@ -37,8 +37,8 @@ hl.bind("SUPER + F", hl.dsp.window.fullscreen({ mode = "fullscreen" }))
 hl.bind("SUPER + W", hl.dsp.layout("togglesplit"))
 
 -- Special workspace
-hl.bind("SUPER + SHIFT + S", hl.dsp.window.move({ workspace = "special:scratchpad" }))
-hl.bind("SUPER + S", hl.dsp.workspace.toggle_special("scratchpad"))
+hl.bind("SUPER + S", hl.dsp.workspace.toggle_special("keepass"))
+hl.bind("SUPER + SHIFT + S", hl.dsp.workspace.toggle_special("scratchpad"))
 
 -- Move focus with mainMod + arrow keys
 hl.bind("SUPER + k", hl.dsp.focus({ direction = "up" }))
