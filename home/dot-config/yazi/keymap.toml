@@ -1,5 +1,5 @@
 [[mgr.prepend_keymap]]
-on   = [ "<C-s>" ]
+on   = [ "<C-k>" ]
 run  = "plugin kdeconnect-send"
 desc = "Send selected files via KDE Connect"
 

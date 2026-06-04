@@ -4,8 +4,8 @@ sort_by       = "mtime"
 sort_reverse  = true
 
 [preview]
-max_width     = 1080
-max_height    = 1920
+max_width     = 3840
+max_height    = 2160
 [opener]
 edit = [
 	{ run = '${EDITOR:=nvim} "$@"', desc = "$EDITOR", block = true, for = "unix" },
