@@ -3,7 +3,11 @@
 
 local HOME = os.getenv("HOME")
 
-hl.bind("CTRL + SHIFT + R", hl.dsp.exec_cmd("hyprctl reload && shikanectl reload && $(pkill waybar && waybar)"))
+hl.bind(
+    "CTRL + SHIFT + R",
+    hl.dsp.exec_cmd("hyprctl reload && shikanectl reload && pkill waybar && waybar || waybar"),
+    { locked = true }
+)
 
 -- Print
 hl.bind("SUPER + A", hl.dsp.exec_cmd("hyprshot -m region --clipboard-only"))

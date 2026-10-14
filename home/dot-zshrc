@@ -66,9 +66,6 @@ bindkey '^e' edit-command-line
 # Accept zsh suggestion
 bindkey '^Y' autosuggest-accept
 
-# path
-export PATH="$HOME/.local/bin:$HOME/.local/sbin:$PATH"
-
 # fzf key bindings
 source <(fzf --zsh)
 
@@ -81,8 +78,10 @@ function y() {
 	rm -f -- "$tmp"
 }
 
-# editor
+# env
+export PATH="$HOME/.local/bin:$HOME/.local/sbin:$PATH"
 export EDITOR=nvim
+export BAT_THEME="Catppuccin Mocha"
 
 # ghcup
 [ -f "/home/mingle/.ghcup/env" ] && source "/home/mingle/.ghcup/env"

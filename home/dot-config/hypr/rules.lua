@@ -137,6 +137,13 @@ hl.window_rule({
 
 hl.window_rule({
     match = {
+        class = "^(io.github.maniacx.BudsLink)$",
+    },
+    float = true,
+})
+
+hl.window_rule({
+    match = {
         class = "^(Xpra)$",
         title = ".*JidePopup.*",
     },

@@ -31,7 +31,7 @@
 }
 
 #entry:selected {
-    /*background-color: /*rgb(245, 98, 36);*/
+    /*background-color: rgb(245, 98, 36);*/
     background-color: #8aadf4;
     border-radius: 0px;
     border: none;

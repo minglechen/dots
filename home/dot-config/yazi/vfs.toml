@@ -1,5 +1,9 @@
-[services.mingle-vm]
-type = "sftp"
+[sftp.mingle-vm]
 host = "mingle-vm.cil.penn"
 user = "mingle02"
+port = 22
+
+[sftp.pve-r740-0]
+host = "pve-r740-0.cil.penn"
+user = "almalinux"
 port = 22

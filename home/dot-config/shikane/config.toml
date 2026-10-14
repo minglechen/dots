@@ -10,9 +10,25 @@ exec = ["notify-send shikane \"Profile $SHIKANE_PROFILE_NAME has been applied\""
     transform = "normal"
     adaptive_sync = false
 
+# Recovery after unplugging the last enabled external display.
+[[profile]]
+name = "laptop-recovery"
+[[profile.output]]
+search = "n=eDP-1"
+enable = true
+mode = "2256x1504@59.999Hz"
+position = "0,0"
+scale = 1.33203125
+transform = "normal"
+adaptive_sync = false
+
+[[profile.output]]
+search = "n=FALLBACK"
+enable = false
+
 [[profile]]
 name = "cil"
-exec = ["notify-send shikane \"Profile $SHIKANE_PROFILE_NAME has been applied\"", "$HOME/.local/bin/inhibit on"]
+exec = ["notify-send shikane \"Profile $SHIKANE_PROFILE_NAME has been applied\"", "$HOME/.local/bin/inhibit off"]
 [[profile.output]]
     enable = true
     search = ["m=Odyssey G95NC", "s=HNTY303943", "v=Samsung Electric Company"]
@@ -26,12 +42,13 @@ exec = ["notify-send shikane \"Profile $SHIKANE_PROFILE_NAME has been applied\""
     search = "n=eDP-1"
 
 [[profile]]
-name = "domus"
+name = "vue32"
+exec = ["notify-send shikane \"Profile $SHIKANE_PROFILE_NAME has been applied\"", "$HOME/.local/bin/inhibit on"]
 [[profile.output]]
     enable = true
     search = ["m=DELL G2724D", "s=7JL16Y3", "v=Dell Inc."]
     mode = "2560x1440@59.951Hz"
-    position = "1692,0"
+    position = "0,0"
     scale = 1.0
     transform = "normal"
     adaptive_sync = false
@@ -40,7 +57,7 @@ name = "domus"
     enable = true
     search = "n=eDP-1"
     mode = "2256x1504@59.999Hz"
-    position = "0,0"
+    position = "2560,0"
     scale = 1.33203125
     transform = "normal"
     adaptive_sync = false
